@@ -1,201 +1,112 @@
-# Computer Networks Lab Programs
+# Computer Networks Lab — C Socket Programming
 
-This repository contains a collection of C socket programming exercises for Computer Networks, implemented using both TCP and UDP. The projects cover text transformation, student record lookup, text analysis, and network communication basics.
+<p align="center">
+  <strong>Government Engineering College, Kishanganj, Bihar</strong><br>
+  Department of Computer Science and Engineering
+</p>
 
-## Repository Overview
+---
 
-The repository includes:
+## Student Information
 
-- TCP client-server applications
-- UDP client-server communication
-- Student database queries using socket communication
-- Network lab assignments in C
+| Field | Details |
+| --- | --- |
+| Student Name | Prem Prakash |
+| Registration / Roll Number | 24157142024 |
+| Branch | Computer Science and Engineering (CSE) |
+| Specialization | Artificial Intelligence and Machine Learning (AI & ML) |
+| Semester | 3rd Semester |
+| Subject | Computer Networks |
+| Programming Language | C |
+| Operating System | Linux |
 
-## Project Structure
+## 1. Aim
 
-- `tcp_server.c` — TCP server for text transformation (`UP`, `LOW`, `REV`)
-- `tcp_client.c` — TCP client for sending transform commands
-- `server_query.c` — TCP server for searching student information by registration number
-- `client_query.c` — TCP client for student queries
-- `server_counting.c` — TCP server for text analysis (`ANALYZE`)
-- `client_counting.c` — TCP client for text analysis requests
-- `Lab-06-server.c` — server for searching records from a file using a custom request structure
-- `Lab-06-client.c` — client for the above file-search application
-- `udp_server.c` — UDP server with roll-based authentication and commands
-- `udp_client.c` — UDP client for sending commands to the UDP server
-- `students.txt` — student database file used by query programs
-- `computer_network_assignment.pdf` — assignment document
+To practise computer networking by building small client-server programs in
+C. The programs use UDP or TCP to send requests and return useful results.
 
-## Lab Assignments Covered
+## 2. Examples in This Project
 
-### 1. Text Transformer Using TCP Sockets
+| Folder | Network protocol | What it does | Port |
+| --- | --- | --- | --- |
+| [`udp-text-conversion/`](./udp-text-conversion/) | UDP | Changes text to uppercase, lowercase, or reverse order. | 30024 |
+| [`tcp-text-conversion/`](./tcp-text-conversion/) | TCP | Changes text to uppercase, lowercase, or reverse order. | 8081 |
+| [`student-lookup/`](./student-lookup/) | TCP | Looks up a student in a data file by ID. | 8080 |
+| [`lab-06-record-search/`](./lab-06-record-search/) | TCP | Searches a data file sent by the client. | 8082 |
+| [`text-analysis/`](./text-analysis/) | TCP | Counts the characters, words, and vowels in text. | 8083 |
 
-Files:
-- `tcp_server.c`
-- `tcp_client.c`
+## 3. Main Concepts
 
-Features:
-- Client sends messages in format: `COMMAND|TEXT`
-- Supported commands:
-  - `UP` — convert to uppercase
-  - `LOW` — convert to lowercase
-  - `REV` — reverse the text
-- Uses TCP (`SOCK_STREAM`)
-- Stops when client sends `bye`
+- Creating client and server sockets.
+- Binding a server to a port and listening for clients.
+- Sending and receiving data.
+- Understanding the difference between connectionless UDP and connection-based
+  TCP.
+- Checking commands, IDs, and input files.
+- Returning a result to the client.
 
-Example:
-
-```text
-Request: UP|Hello world
-Response: HELLO WORLD
-```
-
-### 2. Student Information Query Application
-
-Files:
-- `server_query.c`
-- `client_query.c`
-- `students.txt`
-
-Features:
-- Client sends a registration number
-- Server searches the student data file
-- Returns a record in the format:
+## 4. Project Structure
 
 ```text
-Name: Amit, Branch: ECE, College: GEC Kishanganj
+computer_network/
+├── README.md
+├── udp-text-conversion/
+├── tcp-text-conversion/
+├── student-lookup/
+├── lab-06-record-search/
+└── text-analysis/
 ```
 
-If not found:
+Each example has its own C source files, Makefile, README, and data file if it
+needs one. Open its README for full aims, objectives, build instructions,
+sample output, and results.
 
-```text
-Data not found
+## 5. Requirements
+
+- Linux or Ubuntu on WSL.
+- GCC compiler.
+- `make`.
+- Two terminal windows for each client-server example.
+
+On Ubuntu or Debian, install the tools with:
+
+```sh
+sudo apt update
+sudo apt install build-essential
 ```
 
-### 3. Text Analyzer Using TCP Sockets
+## 6. Build and Run
 
-Files:
-- `server_counting.c`
-- `client_counting.c`
+For example, to build the UDP text transformer:
 
-Features:
-- Client sends: `ANALYZE|TEXT`
-- Server returns:
-  - number of characters
-  - number of words
-  - number of vowels
-
-Example:
-
-```text
-Request: ANALYZE|Hello World
-Response: Chars = 11, Words = 2, Vowels = 3
+```sh
+cd udp-text-conversion
+make
 ```
 
-### 4. UDP Communication Program
+Start `./server` in one terminal. Open a second terminal in the same folder
+and follow that example's README to start its client. The examples use
+`127.0.0.1`, so both programs can run on one Linux computer. Use the server's
+LAN IP instead if the client runs on another computer.
 
-Files:
-- `udp_server.c`
-- `udp_client.c`
+Remove generated programs with:
 
-Features:
-- Uses UDP sockets
-- Requires a valid roll number for access
-- Commands supported:
-  - `UP|text`
-  - `LOW|text`
-  - `REV|text`
-- Server can exit with `EXIT`
-
-## How to Compile
-
-Use GCC to compile the C programs.
-
-### TCP Text Transformer
-
-```bash
-gcc tcp_server.c -o tcp_server
-gcc tcp_client.c -o tcp_client
+```sh
+make clean
 ```
 
-### Student Query Application
+Each example has its own Makefile. Build and clean it from that example's
+folder.
 
-```bash
-gcc server_query.c -o server_query
-gcc client_query.c -o client_query
-```
+## 7. Results
 
-### Text Analyzer Application
+The UDP and TCP text services transform client text. The student and record
+search services return matching records. The text analysis service reports
+character, word, and vowel counts. Each example prints its result in the
+client terminal.
 
-```bash
-gcc server_counting.c -o server_counting
-gcc client_counting.c -o client_counting
-```
+---
 
-### UDP Program
-
-```bash
-gcc udp_server.c -o udp_server
-gcc udp_client.c -o udp_client
-```
-
-## How to Run
-
-### TCP Server and Client
-
-Start the server first:
-
-```bash
-./tcp_server
-```
-
-Then run the client:
-
-```bash
-./tcp_client
-```
-
-### Student Query Example
-
-```bash
-./server_query
-./client_query
-```
-
-### Text Analyzer Example
-
-```bash
-./server_counting
-./client_counting
-```
-
-### UDP Example
-
-```bash
-./udp_server
-./udp_client 127.0.0.1 24157142024
-```
-
-## Notes
-
-- Most programs are designed for local testing with `127.0.0.1`.
-- Some programs can be updated to use other machine IPs by changing the address used in the client.
-- The student query server reads data from `students.txt`.
-- Ensure that the compiled binary and the data file are in the same working directory when needed.
-
-## Technologies Used
-
-- C Programming Language
-- Linux/Unix socket APIs
-- TCP sockets (`SOCK_STREAM`)
-- UDP sockets (`SOCK_DGRAM`)
-- Standard C libraries like `stdio.h`, `stdlib.h`, `string.h`, `unistd.h`, and `arpa/inet.h`
-
-## Author
-
-Government Engineering College Kishanganj
-Department of Computer Science and Engineering
-
-## License
-
-This project is intended for academic learning and lab practice purposes.
+**Submitted by:** Prem Prakash  
+**Department:** Computer Science and Engineering  
+**College:** Government Engineering College, Kishanganj, Bihar
