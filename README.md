@@ -1,276 +1,201 @@
-# Government Engineering College Kishanganj
+# Computer Networks Lab Programs
 
-## Department of Computer Science and Engineering
+This repository contains a collection of C socket programming exercises for Computer Networks, implemented using both TCP and UDP. The projects cover text transformation, student record lookup, text analysis, and network communication basics.
 
-# Computer Networks
+## Repository Overview
 
----
+The repository includes:
 
-# LAB-03
+- TCP client-server applications
+- UDP client-server communication
+- Student database queries using socket communication
+- Network lab assignments in C
 
-## Text Transformer Application Using TCP Sockets
+## Project Structure
 
-### Objective
+- `tcp_server.c` — TCP server for text transformation (`UP`, `LOW`, `REV`)
+- `tcp_client.c` — TCP client for sending transform commands
+- `server_query.c` — TCP server for searching student information by registration number
+- `client_query.c` — TCP client for student queries
+- `server_counting.c` — TCP server for text analysis (`ANALYZE`)
+- `client_counting.c` — TCP client for text analysis requests
+- `Lab-06-server.c` — server for searching records from a file using a custom request structure
+- `Lab-06-client.c` — client for the above file-search application
+- `udp_server.c` — UDP server with roll-based authentication and commands
+- `udp_client.c` — UDP client for sending commands to the UDP server
+- `students.txt` — student database file used by query programs
+- `computer_network_assignment.pdf` — assignment document
 
-The objective of this assignment is to implement a basic client-server application using TCP sockets in C.
+## Lab Assignments Covered
 
-### Problem Statement
+### 1. Text Transformer Using TCP Sockets
 
-Design and implement a **Text Transformer Application** using TCP sockets with the following specifications.
+Files:
+- `tcp_server.c`
+- `tcp_client.c`
 
-### Server Requirements
+Features:
+- Client sends messages in format: `COMMAND|TEXT`
+- Supported commands:
+  - `UP` — convert to uppercase
+  - `LOW` — convert to lowercase
+  - `REV` — reverse the text
+- Uses TCP (`SOCK_STREAM`)
+- Stops when client sends `bye`
 
-The server must:
-
-- Use TCP (`SOCK_STREAM`) sockets.
-- Listen for incoming connections on port `8081`.
-- Accept client connections and process requests.
-- Support the following text transformation commands:
-  - `UP` — Convert text to uppercase.
-  - `LOW` — Convert text to lowercase.
-  - `REV` — Reverse the text.
-
-### Client Requirements
-
-The client must:
-
-- Connect to the server using its IP address.
-- Support both localhost and remote server connections.
-- Send transformation requests in the following format:
-
-```text
-COMMAND|TEXT
-```
-
-### Supported Commands
-
-| Command | Description |
-|---|---|
-| `UP` | Convert TEXT to uppercase |
-| `LOW` | Convert TEXT to lowercase |
-| `REV` | Reverse TEXT |
-
-### Server Response
-
-The server processes the request and sends back the transformed text.
-
-### Example
-
-**Request:**
+Example:
 
 ```text
-UP|Hello world
+Request: UP|Hello world
+Response: HELLO WORLD
 ```
 
-**Response:**
+### 2. Student Information Query Application
 
-```text
-HELLO WORLD
-```
+Files:
+- `server_query.c`
+- `client_query.c`
+- `students.txt`
 
-### Communication Rules
-
-- The client and server should communicate continuously in a loop.
-- The session ends when the client sends the message:
-
-```text
-bye
-```
-
-- Upon receiving `bye`, the server must gracefully terminate the connection.
-
-### Additional Requirements
-
-- Use standard C libraries such as `string.h` for string manipulation.
-- Use TCP sockets (`SOCK_STREAM`).
-- The program should work on the same machine using:
-  - `localhost`
-  - `127.0.0.1`
-- The program should also work between different machines using their actual IP addresses.
-- Properly parse the request using the `|` delimiter.
-- Handle invalid commands appropriately.
-
----
-
-# LAB-04
-
-## Student Information Query Application Using TCP Sockets
-
-### Objective
-
-To implement a TCP-based client-server application in C that performs query-based retrieval of student information.
-
-### Problem Statement
-
-Design and implement a TCP client-server program in C with the following specifications.
-
-### Server Requirements
-
-The server maintains a text file containing student records.
-
-Each record consists of the following fields:
-
-- Registration Number
-- First Name (`FName`)
-- Branch
-- College Name
-
-### Client Requirements
-
-The client sends a **Registration Number** as a query to the server.
-
-### Server Operations
-
-Upon receiving a registration number, the server must:
-
-1. Search the database file for a matching Registration Number.
-2. If a match is found, send the following information back to the client:
-   - First Name
-   - Branch
-   - College Name
-3. If no match is found, send:
-
-```text
-Data not found
-```
-
-### Communication Requirements
-
-- The communication between client and server should be continuous.
-- The client should be able to send multiple queries in a single session.
-- The connection must remain persistent while the client sends queries.
-- The session terminates only when the client sends:
-
-```text
-bye
-```
-
-- After receiving `bye`, both client and server should close the connection gracefully.
-
-### Sample Input/Output
-
-**Client Input:**
-
-```text
-1002
-```
-
-**Server Output:**
+Features:
+- Client sends a registration number
+- Server searches the student data file
+- Returns a record in the format:
 
 ```text
 Name: Amit, Branch: ECE, College: GEC Kishanganj
 ```
 
-**Client Input:**
-
-```text
-9999
-```
-
-**Server Output:**
+If not found:
 
 ```text
 Data not found
 ```
 
-**Client Input:**
+### 3. Text Analyzer Using TCP Sockets
+
+Files:
+- `server_counting.c`
+- `client_counting.c`
+
+Features:
+- Client sends: `ANALYZE|TEXT`
+- Server returns:
+  - number of characters
+  - number of words
+  - number of vowels
+
+Example:
 
 ```text
-bye
+Request: ANALYZE|Hello World
+Response: Chars = 11, Words = 2, Vowels = 3
 ```
 
-**Output:**
+### 4. UDP Communication Program
 
-```text
-Connection terminated
+Files:
+- `udp_server.c`
+- `udp_client.c`
+
+Features:
+- Uses UDP sockets
+- Requires a valid roll number for access
+- Commands supported:
+  - `UP|text`
+  - `LOW|text`
+  - `REV|text`
+- Server can exit with `EXIT`
+
+## How to Compile
+
+Use GCC to compile the C programs.
+
+### TCP Text Transformer
+
+```bash
+gcc tcp_server.c -o tcp_server
+gcc tcp_client.c -o tcp_client
 ```
 
-### Additional Requirements
+### Student Query Application
 
-- Use TCP sockets (`SOCK_STREAM`).
-- The server should maintain the student records in a text file.
-- The client should support multiple queries without reconnecting.
-- The server should search the file for every registration number received.
-- Handle missing or unavailable database files appropriately.
-- Support localhost and remote server connections.
-- Close sockets gracefully when the session ends.
-
----
-
-# LAB-05
-
-## Text Analyzer Application Using TCP Sockets
-
-### Objective
-
-To design and implement a client-server application using TCP sockets in C that performs basic text analysis.
-
-### Problem Statement
-
-Develop a TCP-based application where:
-
-- The client sends a request in the following format:
-
-```text
-ANALYZE|TEXT
+```bash
+gcc server_query.c -o server_query
+gcc client_query.c -o client_query
 ```
 
-- The server processes the text and returns:
-  - Number of characters
-  - Number of words
-  - Number of vowels
+### Text Analyzer Application
 
-### Example
-
-**Request:**
-
-```text
-ANALYZE|Hello World
+```bash
+gcc server_counting.c -o server_counting
+gcc client_counting.c -o client_counting
 ```
 
-**Response:**
+### UDP Program
 
-```text
-Chars=11, Words=2, Vowels=3
+```bash
+gcc udp_server.c -o udp_server
+gcc udp_client.c -o udp_client
 ```
 
-### Additional Requirements
+## How to Run
 
-1. Use TCP sockets (`SOCK_STREAM`).
-2. The client and server should maintain a persistent connection.
-3. The client should be able to send multiple requests in a single session.
-4. The server should process each request and return the corresponding text analysis.
-5. Properly parse input using the delimiter `|`.
-6. The supported command is:
+### TCP Server and Client
 
-```text
-ANALYZE
+Start the server first:
+
+```bash
+./tcp_server
 ```
 
-7. The server should calculate:
-   - Number of characters
-   - Number of words
-   - Number of vowels
-8. The session must continue until the client sends:
+Then run the client:
 
-```text
-bye
+```bash
+./tcp_client
 ```
 
-9. When `bye` is received, both the client and server should close the connection gracefully.
-10. Handle invalid commands appropriately.
-11. Use standard C libraries and TCP socket programming functions.
-12. The application should support multiple text-analysis requests over the same TCP connection.
+### Student Query Example
 
----
+```bash
+./server_query
+./client_query
+```
 
-# General Instructions
+### Text Analyzer Example
 
-- Implement each assignment using the C programming language.
-- Use TCP sockets (`SOCK_STREAM`).
-- Implement separate client and server programs.
-- Test the applications using localhost (`127.0.0.1`).
-- The applications should also support communication between different machines using their IP addresses.
-- Maintain a persistent connection wherever specified.
-- Handle connection errors and invalid requests appropriately.
-- Close sockets gracefully after communication is completed.
+```bash
+./server_counting
+./client_counting
+```
+
+### UDP Example
+
+```bash
+./udp_server
+./udp_client 127.0.0.1 24157142024
+```
+
+## Notes
+
+- Most programs are designed for local testing with `127.0.0.1`.
+- Some programs can be updated to use other machine IPs by changing the address used in the client.
+- The student query server reads data from `students.txt`.
+- Ensure that the compiled binary and the data file are in the same working directory when needed.
+
+## Technologies Used
+
+- C Programming Language
+- Linux/Unix socket APIs
+- TCP sockets (`SOCK_STREAM`)
+- UDP sockets (`SOCK_DGRAM`)
+- Standard C libraries like `stdio.h`, `stdlib.h`, `string.h`, `unistd.h`, and `arpa/inet.h`
+
+## Author
+
+Government Engineering College Kishanganj
+Department of Computer Science and Engineering
+
+## License
+
+This project is intended for academic learning and lab practice purposes.
